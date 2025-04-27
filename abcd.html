@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Graph with 16 Toggle Buttons</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #buttons-container {
+      margin-bottom: 30px;
+    }
+    .toggle-btn {
+      margin: 5px;
+      padding: 10px 15px;
+      background-color: lightgray;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .toggle-btn.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Graph with 16 Toggle Buttons</h2>
+
+<div id="buttons-container"></div>
+<canvas id="myChart" width="800" height="300"></canvas>
+
+<script>
+  // Initial data setup
+  const labels = Array.from({ length: 16 }, (_, i) => `Button ${i+1}`);
+  const data = Array(16).fill(0); // initially all off
+
+  // Chart setup
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar', // Change to 'line' if you want a line chart
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Button States',
+        data: data,
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 1
+        }
+      }
+    }
+  });
+
+  // Create buttons dynamically
+  const buttonsContainer = document.getElementById('buttons-container');
+  for (let i = 0; i < 16; i++) {
+    const button = document.createElement('button');
+    button.textContent = `Button ${i+1}`;
+    button.className = 'toggle-btn';
+    button.dataset.index = i;
+    button.onclick = function() {
+      this.classList.toggle('active');
+      const idx = parseInt(this.dataset.index);
+      data[idx] = data[idx] === 0 ? 1 : 0;
+      myChart.update();
+    };
+    buttonsContainer.appendChild(button);
+  }
+</script>
+
+</body>
+</html>
