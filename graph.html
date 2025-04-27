@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>King of the Hammer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      background: #fdf6e3;
+      padding: 20px;
+    }
+    button {
+      background-color: #facc15;
+      border: none;
+      padding: 20px 40px;
+      font-size: 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #fbbf24;
+    }
+    .hit-result {
+      font-size: 32px;
+      margin-top: 20px;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    .chart-container {
+      margin-top: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Energy generation Stats</h1>
+  <button id="hitButton">Hit the Tile</button>
+  <div class="hit-result" id="hitResult"></div>
+
+  <div class="chart-container">
+    <canvas id="hitChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('hitChart').getContext('2d');
+    const hitData = {
+      labels: [],
+      datasets: [{
+        label: 'Energy Production',
+        data: [],
+        borderColor: '#fbbf24',
+        backgroundColor: '#facc15',
+        fill: false,
+        tension: 0.3
+      }]
+    };
+
+    const hitChart = new Chart(ctx, {
+      type: 'line',
+      data: hitData,
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            min: 0,
+            max: 100
+          }
+        }
+      }
+    });
+
+    const hitButton = document.getElementById('hitButton');
+    const hitResult = document.getElementById('hitResult');
+
+    hitButton.addEventListener('click', () => {
+      const newHit = Math.floor(Math.random() * 100) + 1;
+      hitData.labels.push(`Step ${hitData.labels.length + 1}`);
+      hitData.datasets[0].data.push(newHit);
+      hitChart.update();
+
+      hitResult.textContent = `Wattage ${newHit}`;
+
+      // Animate text on hit
+      hitResult.style.transform = 'scale(1.5)';
+      setTimeout(() => {
+        hitResult.style.transform = 'scale(1)';
+      }, 300);
+    });
+  </script>
+
+</body>
+</html>
